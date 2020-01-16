@@ -1,9 +1,10 @@
 {
   "name": "express",
+  "description":"first React + Node app!!",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "engine":{
+  "engines":{
     "node":"12.13.0",
     "npm":"6.12.0"
   },
