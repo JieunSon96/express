@@ -18,9 +18,13 @@
     "concurrently": "^5.0.2",
     "cookie-parser": "^1.4.3",
     "express": "^4.17.1",
+    "i18next": "^19.0.3",
+    "i18next-browser-languagedetector": "^4.0.1",
+    "i18next-xhr-backend": "^3.2.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.4.20",
     "pm2": "^4.1.2",
+    "react-i18next": "^11.3.1",
     "sanitize-html": "^1.20.1"
   },
   "devDependencies": {
@@ -31,7 +35,7 @@
     "start": "node server/main.js",
     "backend": "nodemon server/main.js",
     "frontend": "npm run start --prefix client",
-    "dev":"concurrently \"npm run backend\" \"npm run start --prefix client\""
+    "dev": "concurrently \"npm run backend\" \"npm run start --prefix client\""
   },
   "repository": {
     "type": "git",
