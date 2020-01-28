@@ -13,6 +13,7 @@ import "materialize-css/dist/css/materialize.min.css";
 import Reducer from './reducers';
 
 import './i18next';
+
 const createStoreWithMiddleware= applyMiddleware(promiseMiddleware,ReduxThunk)(createStore);
 
 ReactDOM.render(
