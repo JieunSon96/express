@@ -1,7 +1,15 @@
 //생활코딩 강좌 내용 참조
 
 const express = require('express')
+const cors=require('cors');
 const app = express();
+
+
+
+//Social Login
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+
 
 const mongoose=require('mongoose');
 const bodyParser=require('body-parser');
@@ -12,16 +20,74 @@ const {auth} =require('./middleware/auth');
 mongoose.connect(config.mongoURI
 ,{useNewUrlParser:true}).then(()=>console.log('DB Connected'))
                               .catch(err=>console.log(err));
-
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use(cookieParser());
+
+
+var googleCredentials= require('./config/google.json');
+
+
+
+app.use(cors());
+app.use(passport.initialize());
+
+passport.use(new GoogleStrategy({
+  clientID: googleCredentials.web.client_id,
+  clientSecret: googleCredentials.web.client_secret,
+  callbackURL:'/auth/google/callback'
+},
+function(accessToken, refreshToken, profile, cb) {
+  process.nextTick(function(){ 
+    return cb(null, profile);
+  });
+ 
+}
+));
 
 app.get("/",(req,res)=>{
   res.json({
     "Hello":"I am happy to deploy our application"
   })
 })
+
+
+passport.serializeUser(function(user, done) {
+    done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+    done(null, obj);
+});
+
+
+//Google Login
+app.get('/api/auth/google',
+  passport.authenticate('google',{scope:['profile','email']})
+  );
+
+app.get('/api/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), 
+		  function(req, res) {
+			res.redirect('/');
+});
+
+app.get("/api/users/logout",auth,(req,res)=>{
+   User.findOneAndUpdate({_id:req.user._id},{token:""},(err,doc)=>{
+     if(err) return res.json({success:false,err})
+     return res.status(200).send({
+       success:true
+     })
+   })
+});
+
+const authenticateUser = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    res.status(301).redirect('/login');
+  }
+};
+
 
 app.get("/api/users/auth",auth,(req,res)=>{
   res.status(200).json({
@@ -78,14 +144,7 @@ app.post('/api/users/login',(req,res)=>{
   });
 });
 
-app.get("/api/users/logout",auth,(req,res)=>{
-   User.findOneAndUpdate({_id:req.user._id},{token:""},(err,doc)=>{
-     if(err) return res.json({success:false,err})
-     return res.status(200).send({
-       success:true
-     })
-   })
-});
+
 
 // app.get('/',(req,res)=>{
 //   res.send('hello world');

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 //import { response } from 'express';
 import { loginUser } from '../../actions/user_actions'
+import { googleLoginUser } from '../../actions/user_actions'
 import { Link } from 'react-router-dom';
 class RegisterLogin extends Component {
 
@@ -16,6 +17,40 @@ class RegisterLogin extends Component {
 
     handleChange = event => {
         this.setState({ [event.target.name]: event.target.value })
+    }
+
+    //Google Login Request
+    googleSubmitForm = event =>{
+        event.preventDefault();
+
+    //  let dataToSubmit = {
+    //         email: this.state.email,
+    //         password: this.state.password
+    //     };
+
+        if (this.isFormvalid(this.state)) {
+            this.setState({ errors: [] })
+            this.props.dispatch(googleLoginUser())
+                // .then(response => {
+                //     if (response.payload.loginSuccess) {
+                //         this.props.history.push('/')
+                //     } else {
+                //         this.setState({
+                //             errors: this.state.errors.concat(
+                //                 "Failed to log in, you can check your Email and Password"
+                //             )
+                //         })
+                //     }
+
+                // }
+                // )
+
+        }else{
+            this.setState({
+                errors:this.state.errors.concat('Form is not valid')
+            })
+        }
+
     }
 
     submitForm = event => {
@@ -93,6 +128,9 @@ class RegisterLogin extends Component {
                             <div className="col s12">
                                 <button className="btn waves-effect red" type="submit" name="action" onClick={this.submitForm}>
                                     Login
+                                </button>&nbsp;&nbsp;&nbsp;
+                                <button className="btn waves-effect blue" type="submit" name="action" onClick={this.googleSubmitForm}>
+                                    Google Login
                                 </button>&nbsp;&nbsp;&nbsp;
                                 <Link to="/register">
                                 <button className="btn waves-effect red" type="submit" name="action">
