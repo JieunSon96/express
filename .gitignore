@@ -1,6 +1,8 @@
 ### Node ###
 # Logs
 dev.js
+google.json
+secretKeys.js
 
 logs
 *.log
@@ -9,4 +11,3 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 node_modules
-config/google.json

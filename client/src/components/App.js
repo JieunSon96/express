@@ -1,21 +1,17 @@
 import React from 'react';
+import Header from './Header';
+import Content from './Content';
+import Footer from './Footer';
 import { Route,Switch } from 'react-router-dom';
-import About from "./about";
-import Login from "./RegisterLogin";
-import Register from "./RegisterLogin/register";
-import Main from "./main";
-import Index from "./Index/index";
-function App() {
+
+
+function App(props) {
 
   return (
     <div className="App">
-      <Switch>
-       <Route path="/about" component={About}/>
-       <Route path="/login" component={Login}/>
-       <Route path="/register" component={Register}/>
-       <Route path="/main" component={Main}/>
-       <Route path="/" component={Index}/>
-      </Switch>
+      <Header/>
+      {props.children}
+      <Footer/>
     </div>
   );
 }
